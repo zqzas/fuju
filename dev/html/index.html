@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Fuju">
+        <meta name="author" content="Mainri">
+        <title>Fuju Project</title>
+
+        <!-- Bootstrap -->
+        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="static/jasny-bootstrap/css/jasny-bootstrap.min.css" rel="stylesheet">
+        
+        <!-- Custom styles for this template -->
+        <link href="default.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="header">
+                <ul class="nav nav-pills pull-right">
+                    <li class="active"><a href="#">Home</a></li>
+                    <!-- <li><a href="#">About</a></li> -->
+                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-signin-modal-lg">登录</button></li>
+					
+                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-register-group-modal-lg">添加小伙伴</button></li>
+                </ul>
+                <h3 class="text-muted">Fuju Project</h3>
+            </div>
+        </div><!--container for header ends --> 
+        
+		<div class="container-fluid">
+			
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-xs-12">
+
+		            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="">
+		                <ol class="carousel-indicators">
+		                     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		                     <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+		                </ol>
+		                <div class="carousel-inner">
+		                    <div class="item active">
+		           			 	<div class="carousel-caption">
+			                        <div class="container-fluid">
+			                            <div class="row">
+			                                <div class="col-md-4">
+			                  		            <img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
+			                  		            <h2>Donec</h2>
+			                                    <p>梅梅梅梅Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. </p>
+			                                </div>
+			                                <div class="col-md-4">
+			                  		            <img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
+			                  		            <h2>sed</h2>
+			                                    <p>梅梅梅梅Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.  </p>
+			                                </div>
+			                                <div class="col-md-4">
+			                  		            <img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
+			                  		            <h2>dui</h2>
+												<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+			                                </div>
+			                            </div> <!-- Row for the item ends-->
+				                        <div class="row">
+											<div class="col-md-12 ">
+				                            	<p>
+													<button class="btn btn-primary" data-toggle="modal" data-target=".bs-register-modal-lg">Request</button>
+												</p>
+											</div>
+
+											 
+				                        </div>	
+			                        </div> <!-- Container for the item ends -->
+								</div><!-- Caption ends-->
+   
+                        
+		                    </div>
+                 
+                
+                 
+		                    <div class="item">
+								<div class="carousel-caption">
+									
+									<form role="form" action="register">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group">
+														<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+															<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+																<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+															</div>
+													        <div>
+																<input type="file" style="display: none;">
+																<!-- 
+																<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+																-->
+													        </div>
+
+														</div>
+										    
+													</div> <!-- Form group ends -->
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+															<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+																<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+															</div>
+													        <div>
+																<input type="file" style="display: none;">
+																<!-- 
+																<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+																-->
+													        </div>
+
+														</div>
+										    
+													</div> <!-- Form group ends -->
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+															<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+																<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+															</div>
+													        <div>
+																<input type="file" style="display: none;">
+																<!-- 
+																<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+																-->
+													        </div>
+
+														</div>
+										    
+													</div> <!-- Form group ends -->
+												</div>
+											</div><!-- Row in the form ends -->
+											<button type="submit" class="btn btn-default">提交</button>
+										</div> <!-- Container for image uploading ends-->
+									</form><!-- Registration form ends -->
+									
+							
+								</div> <!-- Caption ends -->
+
+		                    </div>
+		                </div>
+		                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+		                    <span class="glyphicon glyphicon-chevron-left"></span>
+		                </a>
+		                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+		                    <span class="glyphicon glyphicon-chevron-right"></span>
+		                </a>
+					</div>
+				</div>
+			</div>
+
+		
+
+            </div>
+		</div> <!-- Main container ends -->     
+		
+		<!-- Forms go here -->
+		
+        
+        <div class="registration">
+			<div class="modal fade bs-register-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+			    <div class="modal-dialog modal-lg">
+			      <div class="modal-content">
+
+			      	<div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			          <h3 class="modal-title" id="myLargeModalLabel">注册</h3>
+			        </div>
+			        <div class="modal-body">
+						<!-- Registration form starts -->
+						<form role="form" action="register">
+						    <div class="form-group">
+						        <label for="exampleInputEmail1">邮箱</label>
+						        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+						    </div>
+						    <div class="form-group">
+						        <label for="exampleInputPassword1">密码</label>
+						        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+						    </div>
+						    <div class="form-group">
+						        <label for="exampleInputFile">文件</label>
+						        <input type="file" id="exampleInputFile">
+						        <p class="help-block">Example block-level help text here.</p>
+						    </div>
+						    <div class="checkbox">
+						        <label>
+						            <input type="checkbox"> 记住我
+						        </label>
+						    </div>
+						    <button type="submit" class="btn btn-default">提交</button>
+						</form><!-- Registration form ends -->
+			        </div>
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			</div><!-- Model div ends -->
+		</div> <!-- Registration ends -->
+			
+			
+		<div class="registration-group">
+			<div class="modal fade bs-register-group-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+			    <div class="modal-dialog modal-lg">
+			      <div class="modal-content">
+
+			      	<div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			          <h3 class="modal-title" id="myLargeModalLabel">添加小伙伴</h3>
+			        </div>
+			        <div class="modal-body">
+						<!-- Registration form starts -->
+						<form role="form" action="register">
+							<div class="container-fluid center-block">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+												<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+													<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+												</div>
+										        <div>
+													<input type="file" style="display: none;">
+													<!-- 
+													<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+													-->
+										        </div>
+												<textarea class="form-control" rows="3" placeholder="这里是你，写点什么"></textarea>
+											</div>
+						 
+										</div> <!-- Form group ends -->
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+												<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+													<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+												</div>
+										        <div>
+													<input type="file" style="display: none;">
+													<!-- 
+													<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+													-->
+										        </div>
+												<textarea class="form-control" rows="3" placeholder="这里是小伙伴，帮她（他）写点什么"></textarea>
+											</div>
+						    
+										</div> <!-- Form group ends -->
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<div class="fileinput fileinput-new" data-provides="fileinput"><input type="hidden">
+												<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px; line-height: 150px;">
+													<img data-src="holder.js/200x200/text:Click to Choose Image" alt="...">
+												</div>
+										        <div>
+													<input type="file" style="display: none;">
+													<!-- 
+													<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+													-->
+										        </div>
+												<textarea class="form-control" rows="3" placeholder="这里是小伙伴，帮她（他）写点什么"></textarea>
+
+											</div>
+						    
+										</div> <!-- Form group ends -->
+									</div>
+								</div><!-- Row in the form ends -->
+								<button type="submit" class="btn btn-default">提交</button>
+							</div> <!-- Container for image uploading ends-->
+						</form><!-- Registration form ends -->
+			        </div>
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			</div><!-- Model div ends -->
+		</div> 
+		
+		
+		
+        <div class="signin">
+			<div class="modal fade bs-signin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+			    <div class="modal-dialog modal-lg">
+			      <div class="modal-content">
+
+			      	<div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			          <h3 class="modal-title" id="myLargeModalLabel">登录</h3>
+			        </div>
+			        <div class="modal-body">
+						<!-- Signin form starts -->
+						<form role="form" action="signin">
+						    <div class="form-group">
+						        <label for="exampleInputEmail1">邮箱</label>
+						        <input type="email" class="form-control" id="SigninEmail" placeholder="whoisyourdaddy@fudan.edu.cn">
+						    </div>
+						    <div class="form-group">
+						        <label for="exampleInputPassword1">密码</label>
+						        <input type="password" class="form-control" id="SigninPassword" placeholder="greedisgood">
+						    </div>
+						    <button type="submit" class="btn btn-default">提交</button>
+						</form><!-- Registration form ends -->
+			        </div>
+			      </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			</div><!-- Model div ends -->
+		</div> <!-- Signin ends -->
+        
+		
+		<!-- Forms end here  -->
+		
+		
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="static/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="static/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+        <script src="static/docs.min.js"></script>
+    </body>
+</html>
