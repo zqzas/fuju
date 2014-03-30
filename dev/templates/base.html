@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Fuju">
+        <meta name="author" content="Mainri">
+        <title>Fuju Project</title>
+
+        <!-- Bootstrap -->
+        <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="static/jasny-bootstrap/css/jasny-bootstrap.min.css" rel="stylesheet">
+        
+        <!-- Custom styles for this template -->
+        <link href="default.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="header">
+                <ul class="nav nav-pills pull-right">
+                    <li class="active"><a href="#">Home</a></li>
+                    <!-- <li><a href="#">About</a></li> -->
+                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-signin-modal-lg">登录</button></li>
+					
+                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-register-group-modal-lg">添加小伙伴</button></li>
+                </ul>
+                <h3 class="text-muted">Fuju Project</h3>
+            </div>
+        </div><!--container for header ends --> 
+        
+		<div class="container-fluid">
+			
+			<div class="row">
+				<div class="col-md-12">
+					{% include "group.html" %}
+				</div>
+			</div>
+
+
+            </div>
+		</div> <!-- Main container ends -->     
+		
+		<!-- Forms go here -->
+		
+        
+ 		{% include "register.html" %} <!-- linked by "bs-register-modal-lg" -->
+		{% include "addgroup.html" %} <!-- linked by "bs-register-group-modal-lg" -->
+		
+		{% incldue "signin.html" %}
+		
+		
+       
+		
+		<!-- Forms end here  -->
+		
+		
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="static/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="static/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+        <script src="static/docs.min.js"></script>
+    </body>
+</html>
