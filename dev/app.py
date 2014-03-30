@@ -69,6 +69,28 @@ class Group(db.Model):
     def __repr__(self):
         return '<Group of %d>' % (self.user_id)
 
+class Meeting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    group1_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group2_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    message = db.Column(db.Text)
+
+    def __init__(self, group1_id, group2_id, message):
+        self.group1_id = group1_id
+        self.group2_id = group2_id
+        self.message = message
+
+    def __repr__(self):
+        return '<Meeting between %d and %d with message %s>' % (self.group1_id, self.group2_id, self.message)
+
+
+
+
+
+
+
+
+
 @app.route('/register', method=['GET', 'POST'])
 def register():
     if request.method == 'GET':
@@ -164,6 +186,10 @@ def index():
     user = current_user
     
     #TODO: add more main stuffs here
+
+    groups = user.query.all()
+    return render_template('index.html', groups = groups)
+    
 
 
         
