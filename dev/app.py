@@ -84,7 +84,7 @@ def register():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'GET':
-        return render_template('login.html') #TODO: consider if needed
+        return render_template('signin.html') #TODO: consider if needed
 
     username = request.form['username']
     password_hash = generate_password_hash(request.form['password'])
@@ -155,12 +155,18 @@ def add_group():
     return redirect(url_for('index'))
 
             
+@app.route('/')
+def index():
+    if !current_user or !current_user.is_authenticated():
+        return redirect(url_for('signin'))
+
+    #user has signed in
+    user = current_user
+    
+    #TODO: add more main stuffs here
 
 
-
-
-    group = Group(user.id, 
-
+        
 
 
 

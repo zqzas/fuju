@@ -36,30 +36,8 @@
             </div>
         </div><!--container for header ends --> 
         
-		<div class="container-fluid">
-			
-			<div class="row">
-				<div class="col-md-12">
-					{% include "group.html" %}
-				</div>
-			</div>
-
-
-            </div>
-		</div> <!-- Main container ends -->     
-		
-		<!-- Forms go here -->
-		
-        
- 		{% include "register.html" %} <!-- linked by "bs-register-modal-lg" -->
-		{% include "addgroup.html" %} <!-- linked by "bs-register-group-modal-lg" -->
-		
-		{% incldue "signin.html" %}
-		
-		
-       
-		
-		<!-- Forms end here  -->
+		{% block content %} <!-- content goes here -->
+		{% endblock %}
 		
 		
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
