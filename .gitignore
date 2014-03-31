@@ -53,5 +53,5 @@ coverage.xml
 docs/_build/
 
 
-.swp
+*.swp
 virtualenv_fuju

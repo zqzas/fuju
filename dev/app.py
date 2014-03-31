@@ -1,20 +1,25 @@
 #Author: Mainri (mainri@live.com)
 
-from flask import Flask
+from flask import Flask, url_for, render_template, redirect, request
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask.ext.login import login_user, logout_user, current_user, login_required, LoginManager
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
 
 import os
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'FUD32'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/zqzas/Dropbox/fuju/dev/test.db'
 app.config['MAX_USER_LENGTH'] = 100
 app.config['IMAGE_PATH'] = 'static/image/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'signin'
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -91,7 +96,7 @@ class Meeting(db.Model):
 
 
 
-@app.route('/register', method=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         return render_template('register.html') #TODO: consider if this is needed
@@ -121,7 +126,7 @@ def signin():
 
     return redirect(request.args.get('next') or url_for('index'))
 
-@app.route('/getgroup/<int:group_id>', method=['GET', 'POST'])
+@app.route('/getgroup/<int:group_id>', methods=['GET', 'POST'])
 @login_required
 def get_group(group_id):
     group = Group.query.filter_by(id=group_id).first()
@@ -143,7 +148,7 @@ def allowed_file(filename):
     return '.' in filename and \
             filename.rsplit('.', 1)[1] in ['.jpg', '.jpeg', 'png', 'bmp', 'gif']
 
-@app.route('/addgroup', method=['POST'])
+@app.route('/addgroup', methods=['POST'])
 @login_required
 def add_group():
     user = current_user
@@ -176,10 +181,15 @@ def add_group():
 
     return redirect(url_for('index'))
 
+app.route('/static/<path:path>')
+def static(path):
+    # send_static_file will guess the correct MIME type
+    return app.send_static_file(os.path.join('static', path))
+
             
 @app.route('/')
 def index():
-    if !current_user or !current_user.is_authenticated():
+    if (not current_user) or (not current_user.is_authenticated()):
         return redirect(url_for('signin'))
 
     #user has signed in
@@ -194,9 +204,8 @@ def index():
 
         
 
-
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

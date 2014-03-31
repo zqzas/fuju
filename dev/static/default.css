@@ -1,0 +1,45 @@
+/* DEBUG
+-------------------------------------------------- */
+
+
+
+/* CUSTOMIZE THE HEADER
+-------------------------------------------------- */
+
+.header {
+  padding-bottom: 20px;
+
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+	
+
+  margin-bottom: 20px;
+  
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  z-index: 10;
+  padding-bottom: 50%; 
+  color: #666;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+/*  height: 1000px; */
+  min-height: 1200px;
+/*  background-color: #FFF; */
+}
+
+
+.carousel-inner > .item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 500px;
+}
