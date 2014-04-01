@@ -110,7 +110,8 @@ class Meeting(db.Model):
 def register():
     if request.method == 'GET':
         return render_template('register.html') #TODO: consider if this is needed
-    user = User(request.form['nickname'], request.form['email'], request.form['password'],  request.form['major'])
+    user = User(request.form['nickname'], request.form['email'], request.form['password'], 
+                request.form['major'], request.form['gender'])
     db.session.add(user)
     db.session.commit()
 
@@ -238,6 +239,7 @@ def static(path):
 
             
 @app.route('/<int:group_id>')
+@app.route('/')
 def index(group_id = 0):
     if (not current_user) or (not current_user.is_authenticated()):
         return redirect(url_for('signin'))
