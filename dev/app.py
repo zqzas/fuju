@@ -38,6 +38,7 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.password_hash = generate_password_hash(password) 
+        self.major = major
 
     def is_authenticated(self):
         return True
@@ -106,12 +107,12 @@ class Meeting(db.Model):
 def register():
     if request.method == 'GET':
         return render_template('register.html') #TODO: consider if this is needed
-    user = User(request.form['username'], request.form['email'], request.form['password'],  request.form['major'])
+    user = User(request.form['nickname'], request.form['email'], request.form['password'],  request.form['major'])
     db.session.add(user)
     db.session.commit()
 
     flash("You are in.")
-    return redirect(url_for('login'))
+    return redirect(url_for('signin'))
 
 
 @app.route('/signin', methods=['GET', 'POST'])
