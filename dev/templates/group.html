@@ -12,15 +12,22 @@
 						{% for group in groups %}
 							{% set pics = [group.pic1, group.pic2, group.pic3] %}
 							{% set dess = [group.des1, group.des2, group.des3] %}
-		                    <div class="item">
+
+                            
+                            {% if loop.index == 1%}
+		                    <div class="item active">
+                            {% else%}
+                            <div class="item">
+                            {% endif %}
 		           			 	<div class="carousel-caption">
 			                        <div class="container-fluid">
 			                            <div class="row">
+                                            
 										{% for i in range(3) %}
 										<!-- ATTENTION: should not be more than 3 pics -->
 			                                <div class="col-md-4">
 												{% if pics[i] and pics[i] != '' %}
-													<img src="{{ pics[i] }}" class="img-polaroid img-responsive">
+													<img src="{{ img_path + pics[i] }}" class="img-polaroid img-responsive">
 			                  		            {% else %}
 			                  		            	<img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
 												{% endif %}

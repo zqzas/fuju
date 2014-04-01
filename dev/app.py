@@ -213,8 +213,8 @@ def index():
     
     #TODO: add more main stuffs here
 
-    groups = user.query.all()
-    return render_template('index.html', groups = groups)
+    groups = Group.query.all()
+    return render_template('index.html', groups = groups, img_path = app.config['IMAGE_PATH'])
     
 
 
