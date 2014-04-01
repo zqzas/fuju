@@ -5,8 +5,9 @@
 			
 			<div class="row">
 				<div class="col-md-12">
-					<button class="btn btn-default" data-toggle="modal" data-target=".bs-signin-modal-lg">登录</button>
-					<button class="btn btn-default" data-toggle="modal" data-target=".bs-register-modal-lg">注册</button>
+                <!--TODO: add user info here -->
+                
+                {% include "group.html"%}
 				</div>
 			</div>
 
@@ -17,10 +18,8 @@
 		<!-- Forms go here -->
 		
         
- 		{% include "register.html" %} <!-- linked by "bs-register-modal-lg" -->
+
 		{% include "addgroup.html" %} <!-- linked by "bs-register-group-modal-lg" -->
-		
-		{% incldue "signin.html" %}
 		
 		
 {% endblock %}

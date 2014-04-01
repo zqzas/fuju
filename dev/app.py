@@ -1,6 +1,6 @@
 #Author: Mainri (mainri@live.com)
 
-from flask import Flask, url_for, render_template, redirect, request
+from flask import Flask, url_for, render_template, redirect, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import login_user, logout_user, current_user, login_required, LoginManager
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
@@ -21,6 +21,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'signin'
 
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
@@ -33,7 +37,7 @@ class User(db.Model):
     def __init__(self, username, email, password, major):
         self.username = username
         self.email = email
-        sef.password_hash = generate_password_hash(password) 
+        self.password_hash = generate_password_hash(password) 
 
     def is_authenticated(self):
         return True
@@ -79,11 +83,13 @@ class Meeting(db.Model):
     group1_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     group2_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     message = db.Column(db.Text)
+    status = db.Column(db.Integer)
 
     def __init__(self, group1_id, group2_id, message):
         self.group1_id = group1_id
         self.group2_id = group2_id
         self.message = message
+        self.status = 0
 
     def __repr__(self):
         return '<Meeting between %d and %d with message %s>' % (self.group1_id, self.group2_id, self.message)
@@ -113,14 +119,16 @@ def signin():
     if request.method == 'GET':
         return render_template('signin.html') #TODO: consider if needed
 
-    username = request.form['username']
-    password_hash = generate_password_hash(request.form['password'])
-    registered_user = User.query.filter_by(username=username,password_hash=password_hash).first() 
+    email = request.form['email']
+    password = request.form['password']
+    registered_user = User.query.filter_by(email=email).first() 
     
-    if registered_user is None:
+    print registered_user.password_hash, password #debug
+    if registered_user is None or not check_password_hash(registered_user.password_hash, password):
+        print 'invalid' #debug
         flash('Invalid.')
         return redirect(url_for('index')) #TODO: consider if this is the next page for a failed signin
-
+    print email, ' has signed in.'
     login_user(registered_user)
     flash("You've come in.")
 
@@ -146,30 +154,37 @@ def get_group(group_id):
 
 def allowed_file(filename):
     return '.' in filename and \
-            filename.rsplit('.', 1)[1] in ['.jpg', '.jpeg', 'png', 'bmp', 'gif']
+            filename.rsplit('.', 1)[1] in ['jpg', 'jpeg', 'png', 'bmp', 'gif']
 
 @app.route('/addgroup', methods=['POST'])
 @login_required
 def add_group():
     user = current_user
 
-    uploaded_files = request.files.getlist('file[]')
+    print request.files
+
+    uploaded_files = [request.files['pic1'], request.files['pic2'], request.files['pic3']]
+    print 'ok'
     dess = [request.form['des1'], request.form['des2'], request.form['des3']] #TODO: examine if 3 descriptions actually
-    dess = [dess[i] if dess[i] else '']
+    print 'ok'
+    dess = [des if des else '' for des in dess]
     filenames = []
 
-    for f in uploaded_files:
-        if f and allowed_file(f.filename):
-            filename = secure_filename(f.filename) #filename is secured here
 
+    #TODO: WTForms and form validation are needed.
+
+    for f in uploaded_files:
+        if len(f.filename) and allowed_file(f.filename):
+            filename = secure_filename(f.filename) #filename is secured here
             #it should be an image now
             f.save(os.path.join(app.config['IMAGE_PATH'], filename))
             filenames.append(filename)
 
-    
 
+        
+    
     if len(filenames) > 3 or len(filenames) < 1:
-        return redirect(url_for('index'), error = 'Upload fails.' )
+        return redirect(url_for('index'), error = 'Upload fails.' ) #TODO: handle error
 
     #save the group into db
     group = Group(user.id, filenames[0], dess[0], filenames[1], dess[1], filenames[2], dess[2])
@@ -177,6 +192,7 @@ def add_group():
     db.session.commit()
 
     flash('Upload finished.')
+    print 'Upload finished.' #debug
 
 
     return redirect(url_for('index'))

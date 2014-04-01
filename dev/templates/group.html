@@ -16,7 +16,7 @@
 		           			 	<div class="carousel-caption">
 			                        <div class="container-fluid">
 			                            <div class="row">
-										{% for i in range(length(pics)) %}
+										{% for i in range(3) %}
 										<!-- ATTENTION: should not be more than 3 pics -->
 			                                <div class="col-md-4">
 												{% if pics[i] and pics[i] != '' %}
@@ -24,7 +24,7 @@
 			                  		            {% else %}
 			                  		            	<img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
 												{% endif %}
-			                                    <p>{% dess[i] %}</p>
+			                                    <p>{{ dess[i] }}</p>
 			                                </div>
 											
 										{% endfor %}
