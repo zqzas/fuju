@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'FUD32'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/zqzas/Dropbox/fuju/dev/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/zqzas/Projects/fuju/dev/test.db'
 app.config['MAX_USER_LENGTH'] = 100
 app.config['IMAGE_PATH'] = 'static/image/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -31,14 +31,19 @@ class User(db.Model):
     email = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
     password_hash = db.Column(db.String(app.config['MAX_USER_LENGTH']))
     major = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    gender = db.Column(db.Integer) # 0 for male, 1 for female
+    single = db.Column(db.Integer) # 1 for single
+    info = db.Column(db.PickleType)
 
     groups = db.relationship('Group', backref='user', lazy='dynamic')
 
-    def __init__(self, username, email, password, major):
+    def __init__(self, username, email, password, major, gender, single=1):
         self.username = username
         self.email = email
         self.password_hash = generate_password_hash(password) 
         self.major = major
+        self.gender = gender
+        self.single = single
 
     def is_authenticated(self):
         return True
@@ -58,6 +63,8 @@ class User(db.Model):
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    info = db.Column(db.PickleType)
+
     
     pic1 = db.Column(db.Text)
     pic2 = db.Column(db.Text)
@@ -82,10 +89,12 @@ class Group(db.Model):
 
 class Meeting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    group1_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    group2_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group1_id = db.Column(db.Integer, db.ForeignKey('group.id'), index=True)
+    group2_id = db.Column(db.Integer, db.ForeignKey('group.id'), index=True)
     message = db.Column(db.Text)
     status = db.Column(db.Integer)
+    info = db.Column(db.PickleType)
+
 
     def __init__(self, group1_id, group2_id, message):
         self.group1_id = group1_id
@@ -220,11 +229,12 @@ def request_meeting(group_id):
 
 
     
-
+'''
 @app.route('/static/<path:path>')
 def static(path):
     # send_static_file will guess the correct MIME type
     return app.send_static_file(os.path.join('static', path))
+'''
 
             
 @app.route('/<int:group_id>')
