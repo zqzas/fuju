@@ -58,6 +58,7 @@ class User(db.Model):
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     pic1 = db.Column(db.Text)
     pic2 = db.Column(db.Text)
     pic3 = db.Column(db.Text)
@@ -94,13 +95,6 @@ class Meeting(db.Model):
 
     def __repr__(self):
         return '<Meeting between %d and %d with message %s>' % (self.group1_id, self.group2_id, self.message)
-
-
-
-
-
-
-
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -198,24 +192,53 @@ def add_group():
 
     return redirect(url_for('index'))
 
-app.route('/static/<path:path>')
+
+@app.route('/requestmeeting/<int:group_id>', methods=['GET', 'POST'])
+def request_meeting(group_id):
+    user = current_user
+    group1 = user.groups.first() #assuming user's main group is the first one
+
+    if (group1 is None): #no group for this user. need to add group.
+        return redirect(url_for('index', group_id=group_id)) #TODO: add error info
+        
+    group2 = Group.query.filter_by(id=group_id).first()
+
+    if (group2 is None or group1.id == group2.id):
+        return redirect(url_for('index', group_id=group_id))
+
+    message = request.form['message']
+
+    meeting = Meeting(group1_id=group1.id, group2_id=group2.id, message=message)
+
+    db.session.add(meeting)
+    db.commit()
+
+    return redirect(url_for('index', group_id=group_id))
+
+
+
+
+
+    
+
+@app.route('/static/<path:path>')
 def static(path):
     # send_static_file will guess the correct MIME type
     return app.send_static_file(os.path.join('static', path))
 
             
-@app.route('/')
-def index():
+@app.route('/<int:group_id>')
+def index(group_id = 0):
     if (not current_user) or (not current_user.is_authenticated()):
         return redirect(url_for('signin'))
 
     #user has signed in
     user = current_user
     
-    #TODO: add more main stuffs here
+    #TODO: add more  stuffs here
 
     groups = Group.query.all()
-    return render_template('index.html', groups = groups, img_path = app.config['IMAGE_PATH'])
+    return render_template('index.html', groups = groups, index_group_id = group_id, img_path = app.config['IMAGE_PATH'])
     
 
 
