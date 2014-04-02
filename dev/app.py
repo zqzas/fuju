@@ -9,8 +9,9 @@ import os
 
 app = Flask(__name__)
 
+app.config['CODE_PATH'] = os.path.dirname(os.path.abspath(__file__))
 app.config['SECRET_KEY'] = 'FUD32'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/zqzas/Projects/fuju/dev/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % (os.path.join(app.config['CODE_PATH'], 'test.db'))
 app.config['MAX_USER_LENGTH'] = 100
 app.config['IMAGE_PATH'] = 'static/image/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -199,7 +200,6 @@ def add_group():
     flash('Upload finished.')
     print 'Upload finished.' #debug
 
-
     return redirect(url_for('index'))
 
 
@@ -226,7 +226,23 @@ def request_meeting(group_id):
     return redirect(url_for('index', group_id=group_id))
 
 
+@app.route('/invitations'):
+@login_required
+def invitations():
+    user = current_user
+    
+    groups = user.groups
+    #check every group belongs to current_user
+    meetings_in = []
+    meetings_out = []
+    for group in groups:
+        #requests that sent out from THE group
+        meetings_out.append(Meeting.query.filter_by(group1_id=group.id))
+        #requests that received from other group
+        meetings_in.append(Meeting.query.filter_by(group2_id=group.id))
 
+    return render_template('invitations.html',groups=gruops, meetings_in=meetings_in, meetings_out=meetings_out)
+        
 
 
     
@@ -237,7 +253,7 @@ def static(path):
     return app.send_static_file(os.path.join('static', path))
 '''
 
-            
+
 @app.route('/<int:group_id>')
 @app.route('/')
 def index(group_id = 0):
@@ -249,9 +265,16 @@ def index(group_id = 0):
     
     #TODO: add more  stuffs here
 
-    groups = Group.query.all()
+    gender = request.args.get('gender')
+    if gender is None or group_id != 0:
+        groups = Group.query.all()
+    else:
+        #gender is not None and group_id == 0 (default)
+        gender = 0 if gender == 'boys' else 1
+        groups = Group.query.filter_by(gender=gender)
+
     return render_template('index.html', groups = groups, index_group_id = group_id, img_path = app.config['IMAGE_PATH'])
-    
+
 
 
         
