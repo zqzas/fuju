@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import login_user, logout_user, current_user, login_required, LoginManager
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
 
-import os
+import os, datetime
 
 app = Flask(__name__)
 
@@ -21,6 +21,16 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'signin'
+
+def get_time():
+    return str(datetime.datetime.now().replace(microsecond=0))
+
+def make_message(user, message):
+    if message == None:
+        message = ''
+    return '%s 说："%s"。 于%s。 \n\n' % ( user.nickname, message, get_time())
+
+    
 
 @login_manager.user_loader
 def load_user(id):
@@ -93,7 +103,7 @@ class Meeting(db.Model):
     group1_id = db.Column(db.Integer, db.ForeignKey('group.id'), index=True)
     group2_id = db.Column(db.Integer, db.ForeignKey('group.id'), index=True)
     message = db.Column(db.Text)
-    status = db.Column(db.Integer)
+    status = db.Column(db.Integer) #0 for initial, 1 for success
     info = db.Column(db.PickleType)
 
 
@@ -152,7 +162,7 @@ def get_group(group_id):
     uri_pics = [uri_pic1, uri_pic2, uri_pic3]
     dess = [des1, des2, des3]
 
-    if group: #on succes
+    if group: #on success
         return render_template('group.html', pics = uri_pics, dess = dess) #TODO: pass the parameters for group page.
 
     return redirect(url_for('index'))
@@ -204,6 +214,7 @@ def add_group():
 
 
 @app.route('/requestmeeting/<int:group_id>', methods=['GET', 'POST'])
+@login_required
 def request_meeting(group_id):
     user = current_user
     group1 = user.groups.first() #assuming user's main group is the first one
@@ -213,10 +224,15 @@ def request_meeting(group_id):
         
     group2 = Group.query.filter_by(id=group_id).first()
 
-    if (group2 is None or group1.id == group2.id):
+    if (group2 is None or group1.id == group2.id): #can't invite None or himself
         return redirect(url_for('index', group_id=group_id))
 
-    message = request.form['message']
+    if find_meeting(group1.id, group2.id) is not None: #no duplicate
+        return redirect(url_for('index', group_id=group_id))
+
+    message = request.form['message'] 
+    if message and len(message):
+        message = make_message(user, message)
 
     meeting = Meeting(group1_id=group1.id, group2_id=group2.id, message=message)
 
@@ -224,6 +240,37 @@ def request_meeting(group_id):
     db.commit()
 
     return redirect(url_for('index', group_id=group_id))
+
+def find_meeting(group1_id, group2_id):
+    meetings = Meeting.query.filter_by(group1_id==group1_id) #to take advantage of the index on group1_id
+    for meeting in meetings:
+        if meeting.group2_id == group2_id:
+            return meeting
+    return None
+
+@app.route('/modifymeeting/<int:group_id>', methods=['GET', 'POST'])
+@login_required
+def modify_meeting(group_id):
+    user = current_user
+    user_group = user.groups.first() #assuming user has only one group
+
+    #consider both directions
+    meeting = find_meeting(user_group.id, group_id) or find_meeting(group_id, user_group.id)
+
+    action = request.args.get('action')
+
+    if meeting and action:
+        if action == 'accept':
+            if user_group.id == meeting.group2_id: #should be the target group
+                meeting.status = 1 #for success
+        if action == 'addmessage':
+            message = request.form['message']
+            meeting.message += '%s 说："%s"。 于%s。 \n\n' % ( user.nickname, message, get_time())
+
+        db.session.commit()
+
+    return redirect(url_for('index', group_id=group_id))
+
 
 
 @app.route('/invitations'):
@@ -262,6 +309,7 @@ def index(group_id = 0):
 
     #user has signed in
     user = current_user
+    user_group = user.groups.first() #assuming user has only one group
     
     #TODO: add more  stuffs here
 
@@ -273,7 +321,12 @@ def index(group_id = 0):
         gender = 0 if gender == 'boys' else 1
         groups = Group.query.filter_by(gender=gender)
 
-    return render_template('index.html', groups = groups, index_group_id = group_id, img_path = app.config['IMAGE_PATH'])
+    
+    meeting=find_meeting(user_group.id, group_id) or find_meeting(group_id, user_group.id)
+
+    return render_template('index.html', groups = groups, index_group_id = group_id, 
+                            meeting=meeting, 
+                            img_path = app.config['IMAGE_PATH'])
 
 
 
