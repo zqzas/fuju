@@ -124,10 +124,8 @@ class Meeting(db.Model):
         return '<Meeting between %d and %d with message %s>' % (self.group1_id, self.group2_id, self.message)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST'])
 def register():
-    if request.method == 'GET':
-        return render_template('register.html') #TODO: consider if this is needed
     user = User(request.form['nickname'], request.form['email'], request.form['password'], 
                 request.form['major'], request.form['gender'])
     db.session.add(user)
@@ -140,7 +138,7 @@ def register():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'GET':
-        return render_template('signin.html') #TODO: consider if needed
+        return render_template('signin.html', user=None) #TODO: consider if needed
 
     email = request.form['email']
     password = request.form['password']
@@ -156,6 +154,12 @@ def signin():
     flash("You've come in.")
 
     return redirect(request.args.get('next') or url_for('index'))
+
+@app.route('/signout')
+@login_required
+def signout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/getgroup/<int:group_id>', methods=['GET', 'POST'])
 @login_required
@@ -273,18 +277,22 @@ def modify_meeting(group_id):
     #consider both directions
     meeting = find_meeting(user_group.id, group_id) or find_meeting(group_id, user_group.id)
 
-    action = request.form['action']
-    print action
+    if request.method == 'POST':
+        action = request.form['action']
+    else:
+        action = request.args.get('action')
 
     if meeting and action:
         if action == 'accept':
             if user_group.id == meeting.group2_id: #should be the target group
                 meeting.status = 1 #for success
+
         if action == 'addmessage':
             message = request.form['message']
             meeting.message += make_message(user, message)
         db.session.commit()
 
+    print 'status: ', Meeting.query.first().status
     return redirect(url_for('index', group_id=group_id))
 
 
@@ -304,15 +312,24 @@ def invitations():
         #requests that received from other group
         meetings_in.append(Meeting.query.filter_by(group2_id=group.id))
 
-    return render_template('invitations.html',groups=gruops, meetings_in=meetings_in, meetings_out=meetings_out)
+    return render_template('invitations.html',user=user, groups=groups, 
+                            meetings_in=meetings_in, meetings_out=meetings_out)
         
 
 
 @app.route('/getmodal')
 @login_required
 def get_modal():
+    meeting_id = request.args.get('meeting_id')
+    message = None
+    print meeting_id #debug
+    if meeting_id:
+        meeting = Meeting.query.filter_by(id=meeting_id).first()
+        if meeting:
+            message = meeting.message
+        
     target = request.args.get('target')
-    return render_template('modal.html', target = target)
+    return render_template('modal.html', message=message, target=target)
     
 '''
 @app.route('/static/<path:path>')

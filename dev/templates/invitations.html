@@ -5,28 +5,30 @@
 			{% for group in groups %} {# one user might have multiple groups#}
 				{% set group_meetings_in = meetings_in[loop.index0] %}
 				{% set group_meetings_out = meetings_out[loop.index0] %}
-				<h2> <a href="{{ url_for('index', group.id) }}">你的组合group.id：</a> </h2>
-				<div class="row">
-					<div class="col-md-6">
-	                <!--requests_in -->
-	                	<h3> 收到的邀请 </h3>
-	               	 	{% for meeting in group_meetings_in %}
-							<a href="{{ url_for('index', meeting.group1_id) }}">组合{{meeting.group1_id}}向你们发出邀请。</a>
-						{% endfor %}
+				<div class="panel panel-info">
+					<div class="panel-heading">
+					        <h3 class="panel-title"><a href="{{ url_for('index', group_id=group.id) }}">收到的邀请</a></h3>
 					</div>
-					<div class="col-md-6">
-	                <!--requests_out -->
-						<h3> 发出的邀请 </h3>
+					<ul>
+               	 		{% for meeting in group_meetings_in %}
+						<li><a href="{{ url_for('index', group_id=meeting.group1_id) }}">组合{{meeting.group1_id}} {{"（已接受）" if meeting.status}}</a></li>
+						{% endfor %}
+					</ul>
+				</div> <!-- Panel ends -->
+				<div class="panel panel-info">
+					<div class="panel-heading">
+					        <h3 class="panel-title"><a href="{{ url_for('index', group_id=group.id) }}">发出的邀请</a></h3>
+					</div>
+					<ul>
 	               	 	{% for meeting in group_meetings_out %}
-							<a href="{{ url_for('index', meeting.group2_id) }}">你们邀请了组合{{meeting.group2_id}}。</a>
+						<li><a href="{{ url_for('index', group_id=meeting.group2_id) }}">组合{{meeting.group2_id}}</a></li>
 						{% endfor %}
-					</div>
-				
-				</div>
+					</ul>
+				</div> <!-- Panel ends -->
+					
 			{% endfor %}
 
 
-            </div>
 		</div> <!-- Main container ends -->     
 		
 		<!-- Forms go here -->

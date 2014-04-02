@@ -25,14 +25,24 @@
     <body>
         <div class="container-fluid">
             <div class="header">
-                <ul class="nav nav-pills pull-right">
+                <ul class="nav nav-tabs pull-right">
+					<!--
                     <li class="active"><a href="#">Home</a></li>
-                    <!-- <li><a href="#">About</a></li> -->
-                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-signin-modal-lg">登录</button></li>
-					<li><button class="btn btn-default" data-toggle="modal" data-target=".bs-register-modal-lg">注册</button></li>
-                    <li><button class="btn btn-default" data-toggle="modal" data-target=".bs-register-group-modal-lg">添加小伙伴</button></li>
+                    <li><a href="#">About</a></li> 
+					
+                    <li><a class="btn btn-default" href="/invitations">我的邀请</a></li>
+					<li><button class="btn btn-default" data-toggle="modal" data-target=".bs-register-group-modal-lg">添加小伙伴</button></li>
+					<li><a class="btn btn-default" href='/signout'>登出</a></li>
+					-->
+				
+				<li {% if request.path == "/"%}class="active"{% endif %}><a href="/">首页</a></li>
+				<li {% if request.path == url_for('invitations') %}class="active"{% endif %}><a href="/invitations">我的邀请</a></li>
+				<li><a data-toggle="modal" data-target=".bs-register-group-modal-lg">添加小伙伴</a></li>
+				<li><a href="/signout">登出</a></li>
+
+                    
                 </ul>
-                <h3 class="text-muted">Fuju Project</h3>
+                <a href="/"><h3 class="text-muted">Fuju Project</h3></a>
             </div>
         </div><!--container for header ends --> 
         
