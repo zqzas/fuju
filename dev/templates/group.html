@@ -28,15 +28,25 @@
 										<!-- ATTENTION: should not be more than 3 pics -->
 			                                <div class="col-md-4">
 												{% if pics[i] and pics[i] != '' %}
-													<img src="{{ img_path + pics[i] }}" class="img-polaroid img-responsive">
+													<img src="{{ img_path + pics[i] }}" class="img-thumbnail img-responsive">
 			                  		            {% else %}
 			                  		            	<img class="img-circle" data-src="holder.js/210x210" alt="Generic placeholder image">
 												{% endif %}
-			                                    <p>{{ dess[i] }}</p>
+
 			                                </div>
 											
 										{% endfor %}
 										</div> <!-- Row ends--> 
+			                            <div class="row">
+                                            
+										{% for i in range(3) %}
+										<!-- ATTENTION: should not be more than 3 pics -->
+			                                <div class="col-md-4" style="padding-bottom:30px;">
+			                                    <p>{{ dess[i] }}</p>
+			                                </div>
+											
+										{% endfor %}
+										</div> <!-- Row ends-->
 
 				                        <div class="row">
 											<div class="col-md-12 ">
