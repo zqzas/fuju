@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 #Author: Mainri (mainri@live.com)
 
 from flask import Flask, url_for, render_template, redirect, request, flash
@@ -22,13 +25,17 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'signin'
 
+def debug_log(text):
+    print text
+    return ''
+
 def get_time():
     return str(datetime.datetime.now().replace(microsecond=0))
 
 def make_message(user, message):
     if message == None:
         message = ''
-    return '%s 说："%s"。 于%s。 \n\n' % ( user.nickname, message, get_time())
+    return u'%s 说："%s"。 于%s。 \n\n' % ( user.username, message, get_time())
 
     
 
@@ -170,7 +177,7 @@ def get_group(group_id):
 
 def allowed_file(filename):
     return '.' in filename and \
-            filename.rsplit('.', 1)[1] in ['jpg', 'jpeg', 'png', 'bmp', 'gif']
+            filename.rsplit('.', 1)[1].lower() in ['jpg', 'jpeg', 'png', 'bmp', 'gif']
 
 @app.route('/addgroup', methods=['POST'])
 @login_required
@@ -189,17 +196,22 @@ def add_group():
 
     #TODO: WTForms and form validation are needed.
 
+    counter = 0
+
     for f in uploaded_files:
         if len(f.filename) and allowed_file(f.filename):
             filename = secure_filename(f.filename) #filename is secured here
             #it should be an image now
             f.save(os.path.join(app.config['IMAGE_PATH'], filename))
             filenames.append(filename)
+            counter += 1
+        else:
+            filenames.append('')
 
 
         
     
-    if len(filenames) > 3 or len(filenames) < 1:
+    if counter > 3 or counter < 1:
         return redirect(url_for('index'), error = 'Upload fails.' ) #TODO: handle error
 
     #save the group into db
@@ -237,16 +249,20 @@ def request_meeting(group_id):
     meeting = Meeting(group1_id=group1.id, group2_id=group2.id, message=message)
 
     db.session.add(meeting)
-    db.commit()
+    db.session.commit()
 
     return redirect(url_for('index', group_id=group_id))
 
 def find_meeting(group1_id, group2_id):
-    meetings = Meeting.query.filter_by(group1_id==group1_id) #to take advantage of the index on group1_id
+    meetings = Meeting.query.filter_by(group1_id=group1_id) #to take advantage of the index on group1_id
     for meeting in meetings:
         if meeting.group2_id == group2_id:
             return meeting
     return None
+
+
+    
+
 
 @app.route('/modifymeeting/<int:group_id>', methods=['GET', 'POST'])
 @login_required
@@ -257,7 +273,8 @@ def modify_meeting(group_id):
     #consider both directions
     meeting = find_meeting(user_group.id, group_id) or find_meeting(group_id, user_group.id)
 
-    action = request.args.get('action')
+    action = request.form['action']
+    print action
 
     if meeting and action:
         if action == 'accept':
@@ -265,15 +282,14 @@ def modify_meeting(group_id):
                 meeting.status = 1 #for success
         if action == 'addmessage':
             message = request.form['message']
-            meeting.message += '%s 说："%s"。 于%s。 \n\n' % ( user.nickname, message, get_time())
-
+            meeting.message += make_message(user, message)
         db.session.commit()
 
     return redirect(url_for('index', group_id=group_id))
 
 
 
-@app.route('/invitations'):
+@app.route('/invitations')
 @login_required
 def invitations():
     user = current_user
@@ -292,6 +308,11 @@ def invitations():
         
 
 
+@app.route('/getmodal')
+@login_required
+def get_modal():
+    target = request.args.get('target')
+    return render_template('modal.html', target = target)
     
 '''
 @app.route('/static/<path:path>')
@@ -303,7 +324,7 @@ def static(path):
 
 @app.route('/<int:group_id>')
 @app.route('/')
-def index(group_id = 0):
+def index(group_id = 1):
     if (not current_user) or (not current_user.is_authenticated()):
         return redirect(url_for('signin'))
 
@@ -321,11 +342,15 @@ def index(group_id = 0):
         gender = 0 if gender == 'boys' else 1
         groups = Group.query.filter_by(gender=gender)
 
-    
-    meeting=find_meeting(user_group.id, group_id) or find_meeting(group_id, user_group.id)
+    #if user_group:
+    #    meetings = get_all_meetings(user_group.id)
+    #else:
+    #    meeting = None
+
 
     return render_template('index.html', groups = groups, index_group_id = group_id, 
-                            meeting=meeting, 
+                            find_meeting=find_meeting, user_group=user_group,
+                            user=user,
                             img_path = app.config['IMAGE_PATH'])
 
 
