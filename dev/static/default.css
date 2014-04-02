@@ -25,7 +25,7 @@
 /* Declare heights because of positioning of img element */
 .carousel .item {
 /*  height: 1000px; */
-  min-height: 800px;
+    min-height: 900px;
 /*  background-color: #FFF; */
 }
 
@@ -33,12 +33,9 @@
 	padding-top: 100px;
 	bottom: auto;
 	color: #666;
+	height:auto;
 }
 
-.carousel-inner > .item > img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 500px;
+.carousel-inner  .item  img {
+
 }
