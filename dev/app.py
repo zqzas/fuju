@@ -138,7 +138,7 @@ def register():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'GET':
-        return render_template('signin.html', user=None) #TODO: consider if needed
+        return render_template('frontpage.html', user=None) #TODO: consider if needed
 
     email = request.form['email']
     password = request.form['password']
