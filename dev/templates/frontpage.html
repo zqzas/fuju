@@ -58,15 +58,19 @@
                             登录
                         </button>
                     </div>
+					
                 </form>
-                
+                <button class="btn btn-default" data-toggle="modal" data-target=".bs-register-modal-lg">注册</button>
             </div>
-
+			{% include "register.html" %} <!-- linked by "bs-register-modal-lg" -->
         </div>
     </div>
 </div>
 
 </div>
 
-
+		<script src="static/jquery.min.js"></script>
+		
+		
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 </body></html>

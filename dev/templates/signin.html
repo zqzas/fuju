@@ -1,63 +1,132 @@
- {% extends "base.html" %}
- {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<!-- ==============================================
+		Title and Meta Tags
+		=============================================== -->
+		<meta charset="utf-8">
+		<title>蛋壳</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
- 		<div class="container-fluid" style="padding:100px">
-			
- 			<div class="row">
- 				<div class="col-md-12">
- 					<button class="btn btn-default" data-toggle="modal" data-target=".bs-signin-modal-lg">登录</button>
-					<button class="btn btn-default" data-toggle="modal" data-target=".bs-register-modal-lg">注册</button>
- 				</div>
- 			</div>
-
-
-             </div>
- 		</div> <!-- Main container ends -->     
+		<!-- ==============================================
+		Favicons
+		=============================================== 
+		<link rel="shortcut icon" href="static/assets/favicon.ico">
+		<link rel="apple-touch-icon" href="static/assets/apple-touch-icon.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="static/assets/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="static/assets/apple-touch-icon-114x114.png">
+		-->
+	
+		<!-- ==============================================
+		CSS
+		=============================================== -->    
+		<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/css/font-awesome.css">
+		<link rel="stylesheet" href="static/css/flexslider.css">
+		<link rel="stylesheet" href="static/css/sequencejs-qubico.css" />
+		<link rel="stylesheet" href="static/css/colorbox.css" />
+		<link rel="stylesheet" href="static/css/qubico.css">
+		<link id="main" rel="stylesheet" href="static/css/qubico-light-green.css">
+		<link rel="stylesheet" href="static/css/style-switcher.css">
 		
- 		<!-- Forms go here -->
-        <div class="signin">
-			<div class="modal fade bs-signin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none; top:100px">
-			    <div class="modal-dialog modal-lg">
-			      <div class="modal-content">
+		<link href="static/jasny-bootstrap/css/jasny-bootstrap.min.css" rel="stylesheet">
 
-			      	<div class="modal-header">
-			          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			          <h3 class="modal-title" id="myLargeModalLabel">登录</h3>
-			        </div>
-			        <div class="modal-body">
-						<!-- Signin form starts -->
-						<form role="form" action="signin" method='post'>
-						    <div class="form-group">
-						        <label for="exampleInputEmail1">邮箱</label>
-                                <input type="email" class="form-control" name="email" placeholder="10300500021@fudan.edu.cn">
-                                <!--
-                                <div class="input-group">
-                                     <span class="input-group-addon">@fudan.edu.cn</span> 
-                                </div>
-                                -->
-                                
-						    </div>
-						    <div class="form-group">
-						        <label for="exampleInputPassword1">密码</label>
-						        <input type="password" class="form-control" name="password" placeholder="greedisgood">
-						    </div>
-						    <button type="submit" class="btn btn-default">提交</button>
-						</form><!-- Registration form ends -->
-			        </div>
-			      </div><!-- /.modal-content -->
-			    </div><!-- /.modal-dialog -->
-			</div><!-- Modal div ends -->
-		</div> <!-- Signin ends -->
+
+		<!-- ==============================================
+		Fonts
+		=============================================== 
+		<link href='http://fonts.googleapis.com/css?family=Dosis:600,700,800' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900' rel='stylesheet' type='text/css'>
+		-->
+		<link href='static/css/fonts.css' rel='stylesheet' type='text/css'>	
+
+		<!-- ==============================================
+		JS
+		=============================================== -->
+	
+		<!--[if lt IE 9]>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" src="static/js/modernizr.min.js"></script>
+  
+    </head>
+    <body data-spy="scroll" data-target="#main-nav" data-offset="400" style="padding:200px">
+	
+        <div class="container text-center" id="lead_content" >
+			<!-- 
+            <a href="/" id="logo_link">
+                <img alt="Robinhood logo" class="downscale-fit" id="logo" src="https://brokerage-static.s3.amazonaws.com/assets/marketing/images/home/logo_white.png" data-at2x="https://brokerage-static.s3.amazonaws.com/assets/marketing/images/home/logo_white%402x.png">
+            </a>
+			-->
+				
+            <h1 class="light-text" style="">
+                <span id="slug_title" style="color: #36D9C3;font-weight: 300;">蛋壳</span> 3对3约会，
+            </h1>
+			
+            <h1 class="" style="">
+                让爱情破壳而出。
+            </h1>
+
+            <div id="waitlist_wrapper">
+                
+                <form action="/signin" class="form-inline"  method="post" role="form" novalidate="">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="7EUI5JVE3xDiebSS4C8dMikoBCAuyHwg" data-parsley-id="8191"><ul class="parsley-errors-list" id="parsley-id-8191"></ul>
+                    <div class="form-group" id="waitlist_email_group">
+                        <label class="sr-only" for="join_waitlist_email">Email address</label>
+                        <input class="form-control input-lg waitlist-email"  id="join_waitlist_email" name="email" placeholder="输入学校邮箱" size="40" type="email">
+                    </div>
+                    <div class="form-group" id="waitlist_email_group">
+                        <label class="sr-only" for="join_waitlist_email">Email address</label>
+                        <input class="form-control input-lg waitlist-email" id="join_waitlist_email" name="password" type="password" placeholder="输入密码" size="40">
+                    </div>
+					
+				   
+                    <div class="form-group">
+                        <button class="btn btn-lg btn-qubico" id="home_waitlist_button" type="submit" style="width:150px">
+                            登录
+                        </button>
+                    </div>
+					
+                </form>
+                <button class="btn btn-qubico" data-toggle="modal" data-target=".bs-register-modal-lg" style="width:100px">注册</button>
+            </div>
+			
+        </div>
 		
         
   		{% include "register.html" %} <!-- linked by "bs-register-modal-lg" -->
  		{% include "addgroup.html" %} <!-- linked by "bs-register-group-modal-lg" -->
 		
- 	
 		
 		
- {% endblock %}
- 
- 
+		<!-- ==============================================
+		SCRIPTS
+		=============================================== -->	
+		<script src="static/jquery.min.js"></script>
+		
+		
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src='static/js/jquery.easing.1.3.min.js'></script>
+		<script src='static/js/jquery.scrollto.js'></script>
+		<script src='static/js/jquery.flexslider.min.js'></script>
+		<script src='static/js/jquery.fitvids.js'></script>
+		<script src='static/js/jquery.fittext.js'></script>
+		<script src="static/js/waypoints.min.js"></script>
+		<script src="static/js/jquery.countTo.js"></script>
+		<script src="static/js/jquery.easypiechart.js"></script>
+		<script src="static/js/jquery.sequence-min.js"></script>
+		<script src="static/js/jquery.colorbox-min.js"></script>
+		<script src="static/js/contact.js"></script>
+		<script src="static/js/qubico.js"></script>
+		
+		<script src="static/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+		<script src="static/docs.min.js"></script>
+	
+    </body>
+</html>
+
+
  
   

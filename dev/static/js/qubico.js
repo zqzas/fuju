@@ -5,9 +5,9 @@ $(document).ready(function() {
 	==============================================*/
 	var sequenceOptions = {
         autoPlay: false, //true
-        autoPlayDelay: 4000,
+        autoPlayDelay: 0,
         pauseOnHover: false,
-        hidePreloaderDelay: 500,
+        hidePreloaderDelay: 0,
         nextButton: true,
         prevButton: true,
         pauseButton: true,
