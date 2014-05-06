@@ -5,78 +5,102 @@
 
 from flask import Flask, url_for, render_template, redirect, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import login_user, logout_user, current_user, login_required, LoginManager
+from flask.ext.login import login_user, logout_user, current_user, LoginManager
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
+
+from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required
+    
+from flask_mail import Mail
 
 import os, datetime
 
+
 app = Flask(__name__)
+
+app.config['MY_DOMAIN'] = 'fdanke.com' #just to hold the place
 
 app.config['CODE_PATH'] = os.path.dirname(os.path.abspath(__file__))
 app.config['SECRET_KEY'] = 'FUD32'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % (os.path.join(app.config['CODE_PATH'], 'test.db'))
-app.config['MAX_USER_LENGTH'] = 100
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % (os.path.join(app.config['CODE_PATH'], 'beta.db'))
+app.config['MAX_USER_LENGTH'] = 255
 app.config['IMAGE_PATH'] = 'static/image/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['SECURITY_TRACKABLE'] = True
+app.config['SECURITY_PASSWORD_HASH'] = 'bcrypt'
+app.config['SECURITY_PASSWORD_SALT'] = '32'
+app.config['SECURITY_EMAIL_SENDER'] = 'danke_fd@163.com'
+app.config['SECURITY_CONFIRMABLE'] = True #Users are required to confirm their email when registering
+app.config['SECURITY_REGISTERABLE'] = True
+app.config['SECURITY_RECOVERABLE'] = True
+
+app.config['MAIL_SERVER'] = 'smtp.163.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'danke_fd'
+app.config['MAIL_PASSWORD'] = 'u4HmMe8q'
 
 db = SQLAlchemy(app)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'signin'
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = 'signin'
 
-def debug_log(text):
-    print text
-    return ''
+#! The view for login: login, login.html
 
-def get_time():
-    return str(datetime.datetime.now().replace(microsecond=0))
 
-def make_message(user, message):
-    if message == None:
-        message = ''
-    return u'%s 说："%s"。 于%s。 \n\n' % ( user.username, message, get_time())
+#
+# Models
+#
 
-    
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
     email = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
-    password_hash = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    password = db.Column(db.String(app.config['MAX_USER_LENGTH']))
     major = db.Column(db.String(app.config['MAX_USER_LENGTH']))
     gender = db.Column(db.Integer) # 0 for male, 1 for female
     single = db.Column(db.Integer) # 1 for single
     info = db.Column(db.PickleType)
+    
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
 
     groups = db.relationship('Group', backref='user', lazy='dynamic')
+    roles = db.relationship('Role', secondary=roles_users,
+                                backref=db.backref('users', lazy='dynamic'))
 
-    def __init__(self, username, email, password, major, gender, single=1):
-        self.username = username
-        self.email = email
-        self.password_hash = generate_password_hash(password) 
-        self.major = major
-        self.gender = gender
-        self.single = single
+    #def __init__(self, username, email, password, major, gender, single=1):
+    #    self.username = username
+    #    self.email = email
+    #    self.password_hash = generate_password_hash(password) 
+    #    self.major = major
+    #    self.gender = gender
+    #    self.single = single
 
-    def is_authenticated(self):
-        return True
+    #def is_authenticated(self):
+    #    return True
  
-    def is_active(self):
-        return True
+    #def is_active(self):
+    #    return True
  
-    def is_anonymous(self):
-        return False
+    #def is_anonymous(self):
+    #    return False
  
-    def get_id(self):
-        return unicode(self.id)
+    #def get_id(self):
+    #    return unicode(self.id)
  
-    def __repr__(self):
-        return '<User %r>' % (self.username)
+    #def __repr__(self):
+    #    return '<User %r>' % (self.username)
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -124,6 +148,34 @@ class Meeting(db.Model):
         return '<Meeting between %d and %d with message %s>' % (self.group1_id, self.group2_id, self.message)
 
 
+
+
+# Setup Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
+
+#Setup Mail
+mail = Mail(app)
+
+def debug_log(text):
+    print text
+    return ''
+
+def get_time():
+    return str(datetime.datetime.now().replace(microsecond=0))
+
+def make_message(user, message):
+    if message == None:
+        message = ''
+    return u'%s 说："%s"。 于%s。 \n\n' % ( user.username, message, get_time())
+
+    
+
+#@login_manager.user_loader
+#def load_user(id):
+#    return User.query.get(int(id))
+
+
 @app.route('/register', methods=['POST'])
 def register():
     user = User(request.form['nickname'], request.form['email'], request.form['password'], 
@@ -154,6 +206,7 @@ def signin():
     flash("You've come in.")
 
     return redirect(request.args.get('next') or url_for('index'))
+
 
 @app.route('/signout')
 @login_required
@@ -341,9 +394,8 @@ def static(path):
 
 @app.route('/<int:group_id>')
 @app.route('/')
+@login_required
 def index(group_id = 1):
-    if (not current_user) or (not current_user.is_authenticated()):
-        return redirect(url_for('signin'))
 
     #user has signed in
     user = current_user
