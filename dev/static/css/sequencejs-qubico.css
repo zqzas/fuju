@@ -22,7 +22,7 @@ ol, ul {
 
 #sequence-theme {
   width: 100%;
-  height: 650px;
+  height: 550px; 
   overflow: hidden;
 }
 
@@ -33,7 +33,7 @@ ol, ul {
 
 #sequence {
   position: relative;
-  height: 650px;
+  height: 550px; 
   width: 100%;
   margin: 0 auto;
   background: transparent;
@@ -386,11 +386,11 @@ ol, ul {
 #sequence .sequence-canvas .animate-out > * {
 	opacity:0;
 }
-
+/* 
 @media (max-width: 991px){
     #sequence,
     #sequence-theme{
-        height:530px;
+       height:530px; 
     }
 }
 
@@ -441,7 +441,7 @@ ol, ul {
 	}
 
 }
-
+*/
 
 
 
