@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-		<div class="container" style="padding:100px">
+		<div class="container" style="padding-top:100px">
 			{% for group in groups %} {# one user might have multiple groups#}
 				{% set group_meetings_in = meetings_in[loop.index0] %}
 				{% set group_meetings_out = meetings_out[loop.index0] %}
