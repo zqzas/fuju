@@ -89,7 +89,13 @@
 							<a href="/invitations">我的邀请</a>
 						</li>
 						<li>
-							<a data-toggle="modal" data-target=".bs-register-group-modal-lg" class="scrollto">添加小伙伴</a>
+							<a data-toggle="modal" data-target=".bs-register-group-modal-lg" class="scrollto">
+                            {% if user.groups.count() == 0 %}    
+                                添加小伙伴
+                            {% else %}
+                                更新小伙伴
+                            {% endif %}
+                            </a>
 						</li>
 						<li>
 							<a href="/signout">注销</a>

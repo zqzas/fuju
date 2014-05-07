@@ -9,7 +9,11 @@ from flask.ext.login import login_user, logout_user, current_user, LoginManager
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
 
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+    UserMixin, RoleMixin, login_required, url_for_security
+from flask_security.forms import ConfirmRegisterForm, Required, _default_field_labels
+from wtforms import TextField
+from flask_wtf.html5 import IntegerField
+from wtforms.fields import RadioField
     
 from flask_mail import Mail
 
@@ -59,7 +63,7 @@ roles_users = db.Table('roles_users',
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
+    nickname = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
     email = db.Column(db.String(app.config['MAX_USER_LENGTH']), unique=True)
     password = db.Column(db.String(app.config['MAX_USER_LENGTH']))
     major = db.Column(db.String(app.config['MAX_USER_LENGTH']))
@@ -69,6 +73,12 @@ class User(db.Model, UserMixin):
     
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
+    
+    last_login_at = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    current_login_at = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    last_login_ip = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    current_login_ip = db.Column(db.String(app.config['MAX_USER_LENGTH']))
+    login_count = db.Column(db.Integer)
 
     groups = db.relationship('Group', backref='user', lazy='dynamic')
     roles = db.relationship('Role', secondary=roles_users,
@@ -106,7 +116,8 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     info = db.Column(db.PickleType)
-
+    
+    status = db.Column(db.Integer)
     
     pic1 = db.Column(db.Text)
     pic2 = db.Column(db.Text)
@@ -118,6 +129,7 @@ class Group(db.Model):
 
     def __init__(self, user_id, pic1, des1, pic2, des2, pic3, des3):
         self.user_id = user_id
+        self.status = 0 #normal status
         self.pic1 = pic1
         self.pic2 = pic2
         self.pic3 = pic3
@@ -150,9 +162,23 @@ class Meeting(db.Model):
 
 
 
+#
+# Customize forms
+#
+
+class ExtendedConfirmRegisterForm(ConfirmRegisterForm):    
+    nickname = TextField('昵称', [Required()])
+    major = TextField('专业年级', [Required()])
+    gender = RadioField('gender', choices=[('0', '男'), ('1', '女')])
+    
+    
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+security = Security(app, user_datastore, confirm_register_form = ExtendedConfirmRegisterForm)
+
+@security.login_context_processor
+def security_login_processor():
+    return dict( register_user_form=ExtendedConfirmRegisterForm() )
 
 #Setup Mail
 mail = Mail(app)
@@ -167,7 +193,7 @@ def get_time():
 def make_message(user, message):
     if message == None:
         message = ''
-    return u'%s 说："%s"。 于%s。 \n\n' % ( user.username, message, get_time())
+    return u'%s 说："%s"。 于%s。 \n\n' % ( user.nickname, message, get_time())
 
     
 
@@ -238,7 +264,7 @@ def allowed_file(filename):
 
 @app.route('/addgroup', methods=['POST'])
 @login_required
-def add_group():
+def add_or_update_group():
     user = current_user
 
     print request.files
@@ -264,17 +290,22 @@ def add_group():
             counter += 1
         else:
             filenames.append('')
-
-
-        
     
     if counter > 3 or counter < 1:
         return redirect(url_for('index'), error = 'Upload fails.' ) #TODO: handle error
 
     #save the group into db
-    group = Group(user.id, filenames[0], dess[0], filenames[1], dess[1], filenames[2], dess[2])
-    db.session.add(group)
-    db.session.commit()
+    if user.groups.count() == 0:
+        group = Group(user.id, filenames[0], dess[0], filenames[1], dess[1], filenames[2], dess[2])
+        db.session.add(group)
+        db.session.commit()
+    else:
+        #User is already in group
+        group = user.groups.first() #consider only first one
+        (group.pic1, group.pic2, group.pic3) = tuple(filenames) # filenames should have no more than 3 elements
+        (group.des1, group.des2, group.des3) = tuple(dess) # dess should have no more than 3 elements
+        db.session.add(group)
+        db.session.commit()
 
     flash('Upload finished.')
     print 'Upload finished.' #debug
@@ -394,22 +425,26 @@ def static(path):
 
 @app.route('/<int:group_id>')
 @app.route('/')
-@login_required
-def index(group_id = 1):
-
+def index(group_id = None):
+    if not current_user or not current_user.is_authenticated():
+        return redirect(url_for_security('login'))
     #user has signed in
     user = current_user
     user_group = user.groups.first() #assuming user has only one group
     
     #TODO: add more  stuffs here
 
-    gender = request.args.get('gender')
-    if gender is None or group_id != 0:
-        groups = Group.query.all()
+    if group_id:
+        groups = Group.query.filter_by(id=group_id)
     else:
-        #gender is not None and group_id == 0 (default)
-        gender = 0 if gender == 'boys' else 1
-        groups = Group.query.filter_by(gender=gender)
+        #no group_id
+        gender = request.args.get('gender')
+        if gender is None:
+            groups = Group.query.all()
+        else:
+            #gender is not None and group_id is None (default)
+            gender = 0 if gender == 'boys' else 1
+            groups = Group.query.filter_by(gender=gender)
 
     #if user_group:
     #    meetings = get_all_meetings(user_group.id)
@@ -427,7 +462,7 @@ def index(group_id = 1):
         
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run("0.0.0.0", debug=True)
 
 
 

@@ -37,7 +37,7 @@
 										<div class="col-md-4 col-md-offset-5 ">
 
 			                            	<p>
-											{% set meeting = find_meeting(user_group.id, group.id) or find_meeting(group.id, user_group.id) %}
+											{% set meeting = find_meeting(user_group.id, group.id) or find_meeting(group.id, user_group.id) if user_group else None%}
 											{% if meeting %}
 										
 												{# message part #}
