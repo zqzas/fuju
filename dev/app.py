@@ -435,7 +435,7 @@ def index(group_id = None):
     #TODO: add more  stuffs here
 
     if group_id:
-        groups = Group.query.filter_by(id=group_id)
+        groups = Group.query.filter_by(id=group_id).all()
     else:
         #no group_id
         gender = request.args.get('gender')
@@ -444,7 +444,7 @@ def index(group_id = None):
         else:
             #gender is not None and group_id is None (default)
             gender = 0 if gender == 'boys' else 1
-            groups = Group.query.filter_by(gender=gender)
+            groups = Group.query.filter_by(gender=gender).all()
 
     #if user_group:
     #    meetings = get_all_meetings(user_group.id)
