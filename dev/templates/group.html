@@ -47,7 +47,9 @@
 												{% if meeting.group1_id == group.id %}
 													<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', meeting_id=meeting.id, target='/modifymeeting/%d' % group.id )}}" data-target="#myModal">他们已邀请你们，留言</a>
 													{% if meeting.status == 0 %}
-													<a class="btn btn-qubico white scrollto" href={{"/modifymeeting/%d?action=accept" % group.id}}>接受邀请</a>
+                                                    
+													<a class="btn btn-qubico white" href="{{ url_for('modify_meeting', group_id=group.id, action='accept') }}">接受邀请</a>
+                                                    
 													{% else%}
 													<a class="btn btn-qubico white scrollto" disabled="disabled">已接受邀请</a>
 													{% endif%}
@@ -57,6 +59,7 @@
 										
 											{% else %}
 												{% if group.user.id != user.id %}
+                                                    
 													<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', target='/requestmeeting/%d' % group.id )}}" data-target="#myModal">发出邀请</a>
 													
 												{% else %}

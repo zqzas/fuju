@@ -10,7 +10,10 @@ from werkzeug import generate_password_hash, check_password_hash, secure_filenam
 
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, url_for_security
-from flask_security.forms import ConfirmRegisterForm, Required, _default_field_labels
+    
+from flask_security.forms import ConfirmRegisterForm, Required, _default_field_labels, \
+    get_form_field_label, email_required, email_validator, unique_user_email, ValidationError
+    
 from wtforms import TextField
 from flask_wtf.html5 import IntegerField
 from wtforms.fields import RadioField
@@ -166,10 +169,18 @@ class Meeting(db.Model):
 # Customize forms
 #
 
+def edu_email_checker(form, field):
+    if not field.data.endswith('fudan.edu.cn'):
+        raise ValidationError('Mail at fudan.edu.cn, please.')
+
 class ExtendedConfirmRegisterForm(ConfirmRegisterForm):    
+    email = TextField(
+            get_form_field_label('email'),
+            validators=[email_required, email_validator, unique_user_email, edu_email_checker])
+    
     nickname = TextField('昵称', [Required()])
     major = TextField('专业年级', [Required()])
-    gender = RadioField('gender', choices=[('0', '男'), ('1', '女')])
+    gender = RadioField('性别', choices=[('0', '男'), ('1', '女')])
     
     
 # Setup Flask-Security
