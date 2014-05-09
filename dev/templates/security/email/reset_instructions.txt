@@ -1,3 +1,4 @@
-Click the link below to reset your password:
+蛋壳用户您好，
+  请点击下面链接重置密码:
 
 {{ reset_link }}

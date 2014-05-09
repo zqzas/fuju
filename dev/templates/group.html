@@ -12,8 +12,8 @@
 						{% for group in groups %}
 							{% set pics = [group.pic1, group.pic2, group.pic3] %}
 							{% set dess = [group.des1, group.des2, group.des3] %}
-							<li>
-								<div class="container-fluid" style="left: 15%; right: 15%; top:7%">
+							<li style="text-align:center;">
+								<div class="container-fluid" style="left: 15%; right: 15%; top:7% ">
 									<div class="row">
 										<!-- ATTENTION: should not be more than 3 pics -->
 										<div class="col-md-4 in-from-top fast">
@@ -34,43 +34,45 @@
 								<!-- Row starts -->
 								
 			                        <div class="row">
-										<div class="col-md-4 col-md-offset-5 ">
+										<div>
+											<div class="col-md-6 col-md-offset-3" >
 
-			                            	<p>
-											{% set meeting = find_meeting(user_group.id, group.id) or find_meeting(group.id, user_group.id) if user_group else None%}
-											{% if meeting %}
+				                            	<p style="">
+												{% set meeting = find_meeting(user_group.id, group.id) or find_meeting(group.id, user_group.id) if user_group else None%}
+												{% if meeting %}
 										
-												{# message part #}
-												{% set target = '/modifymeeting/%d' % group.id %}
-												{# <h3>私聊</h3><pre>{{ meeting.message }}</pre> #}
-										
-												{% if meeting.group1_id == group.id %}
-													<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', meeting_id=meeting.id, target='/modifymeeting/%d' % group.id )}}" data-target="#myModal">他们已邀请你们，留言</a>
-													{% if meeting.status == 0 %}
-                                                    
-													<a class="btn btn-qubico white" href="{{ url_for('modify_meeting', group_id=group.id, action='accept') }}">接受邀请</a>
-                                                    
-													{% else%}
-													<a class="btn btn-qubico white scrollto" disabled="disabled">已接受邀请</a>
-													{% endif%}
-												{% else %}
-													<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', meeting_id=meeting.id, target='/modifymeeting/%d' % group.id )}}" data-target="#myModal">留言</a>
-												{% endif %}
-										
-											{% else %}
-												{% if group.user.id != user.id %}
-                                                    
-													<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', target='/requestmeeting/%d' % group.id )}}" data-target="#myModal">发出邀请</a>
+													{# message part #}
+													{% set target = '/modifymeeting/%d' % group.id %}
 													
+										
+													{% if meeting.group1_id == group.id %}
+														<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', meeting_id=meeting.id, target='/modifymeeting/%d' % group.id )}}" data-target="#myModal">他们已邀请你们，留言</a>
+														{% if meeting.status == 0 %}
+                                                    
+														<a class="btn btn-qubico white" href="{{ url_for('modify_meeting', group_id=group.id, action='accept') }}">接受邀请</a>
+                                                    
+														{% else%}
+														<a class="btn btn-qubico white scrollto" disabled="disabled">已接受邀请</a>
+														{% endif%}
+													{% else %}
+														<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', meeting_id=meeting.id, target='/modifymeeting/%d' % group.id )}}" data-target="#myModal">留言</a>
+													{% endif %}
+										
 												{% else %}
+													{% if group.user.id != user.id %}
+                                                    
+														<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', target='/requestmeeting/%d' % group.id )}}" data-target="#myModal">发出邀请</a>
+													
+													{% else %}
 
-													<a class="btn btn-qubico white scrollto" disabled="disabled">自己</a>
-												{% endif %}
+														<a class="btn btn-qubico white scrollto" disabled="disabled">自己</a>
+													{% endif %}
 										
 
-											{% endif %}
-											</p>
-										</div> <!-- col-md-12 ends -->				 
+												{% endif %}
+												</p>
+											</div> <!-- col-md-5 ends -->	
+										</div>			 
 			                        </div> <!-- Row ends-->
 								</div><!-- Container ends-->
 							</li>
@@ -81,6 +83,7 @@
 					</div>
 				</div>
 			</header><!--End header -->
+			
 				<!-- Modal -->
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top:100px;">
 				    <div class="modal-dialog">

@@ -47,6 +47,25 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'danke_fd'
 app.config['MAIL_PASSWORD'] = 'u4HmMe8q'
 
+app.config['SECURITY_MSG_INVALID_PASSWORD'] = (
+        u'密码错误。', 'error')
+app.config['SECURITY_MSG_CONFIRM_REGISTRATION'] = (
+        u'麻烦前往邮箱，点击确认链接完成注册，谢谢！', 'success')
+app.config['SECURITY_MSG_EMAIL_ALREADY_ASSOCIATED'] = (
+        '%(email)s 该邮箱已经注册。', 'error')
+app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
+        '请验证邮箱。', 'error')
+app.config['SECURITY_MSG_INVALID_EMAIL_ADDRESS'] = (
+        '邮箱无效。', 'error')
+app.config['SECURITY_MSG_PASSWORD_INVALID_LENGTH'] = (
+        '密码请至少包含6个字符。', 'error')
+app.config['SECURITY_MSG_USER_DOES_NOT_EXIST'] = (
+        '用户不存在。', 'error')
+app.config['SECURITY_MSG_PASSWORDLESS_LOGIN_SUCCESSFUL'] = (
+        '登录成功！', 'success')
+app.config['SECURITY_MSG_LOGIN']= (
+        '请登录。', 'info')
+
 db = SQLAlchemy(app)
 
 #login_manager = LoginManager()
@@ -178,9 +197,9 @@ class ExtendedConfirmRegisterForm(ConfirmRegisterForm):
             get_form_field_label('email'),
             validators=[email_required, email_validator, unique_user_email, edu_email_checker])
     
-    nickname = TextField('昵称', [Required()])
-    major = TextField('专业年级', [Required()])
-    gender = RadioField('性别', choices=[('0', '男'), ('1', '女')])
+    nickname = TextField('nickname', [Required()])
+    major = TextField('major', [Required()])
+    gender = RadioField('gender', choices=[('0', u'男'), ('1', u'女')])
     
     
 # Setup Flask-Security

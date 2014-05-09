@@ -1,7 +1,7 @@
 Welcome {{ user.email }}!
 
 {% if security.confirmable %}
-You can confirm your email through the link below:
+请点击下面的链接确认邮箱:
 
 {{ confirmation_link }}
 {% endif %}

@@ -5,9 +5,9 @@
     {{ register_user_form.hidden_tag() }}
   
     {{ render_field_with_errors_with_customlabel(register_user_form.email, "邮箱(目前仅向复旦邮箱开放注册)", class_="form-control", placeholder="例如：10300500021@fudan.edu.cn") }}
-    {{ render_field_with_errors(register_user_form.nickname, class_="form-control", placeholder="例如：daisy") }}
-    {{ render_field_with_errors(register_user_form.major, class_="form-control", placeholder="例如：10计算机") }}
-    {{ render_field_with_errors(register_user_form.gender) }}
+    {{ render_field_with_errors_with_customlabel(register_user_form.nickname, "昵称", class_="form-control", placeholder="例如：daisy") }}
+    {{ render_field_with_errors_with_customlabel(register_user_form.major,"专业年级", class_="form-control", placeholder="例如：10计算机",) }}
+    {{ render_field_with_errors_with_customlabel(register_user_form.gender, "性别") }}
     {{ render_field_with_errors_with_customlabel(register_user_form.password, "密码", class_="form-control") }}
 
     {% if register_user_form.password_confirm %}
