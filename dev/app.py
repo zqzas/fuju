@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 #Author: Mainri (mainri@live.com)
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 
 from flask import Flask, url_for, render_template, redirect, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -24,6 +26,9 @@ import os, datetime
 
 
 app = Flask(__name__)
+
+#DEBUG
+app.debug = True
 
 app.config['MY_DOMAIN'] = 'fdanke.com' #just to hold the place
 
