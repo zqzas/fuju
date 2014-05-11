@@ -1,7 +1,10 @@
 <p>Welcome {{ user.email }}!</p>
 
 {% if security.confirmable %}
-<p>You can confirm your email through the link below:</p>
+<p>请点击下面链接确认邮箱，完成注册：</p>
 
-<p><a href="{{ confirmation_link }}">Confirm my account</a></p>
+<p><a href="{{ confirmation_link }}">验证链接。</a></p>
+<p>或者：<pre> {{ confirmation_link }} </pre></p>
+
 {% endif %}
+

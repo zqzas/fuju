@@ -1,5 +1,5 @@
 {% if security.registerable or security.recoverable or security.confirmabled %}
-<h2>Menu</h2>
+<h2>用户管理</h2>
 <ul>
   <li><a href="{{ url_for_security('login') }}">Login</a></li>
   {% if security.registerable %}

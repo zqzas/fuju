@@ -82,9 +82,14 @@
                   
                   {{ render_field(login_user_form.next) }}
                   {{ render_field(login_user_form.submit, class_="btn btn-lg btn-qubico", value="登录") }}
+				  
+                  <a class="btn btn-lg btn-qubico " href="{{url_for_security('forgot_password')}}" style="">
+                      忘记密码
+                  </a>
                 </form>
                 
                 
+				
                 <button class="btn btn-qubico" data-toggle="modal" data-target=".bs-register-modal-lg" style="width:100px">注册</button>
             </div>
 			

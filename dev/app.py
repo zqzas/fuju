@@ -52,20 +52,22 @@ app.config['SECURITY_MSG_INVALID_PASSWORD'] = (
 app.config['SECURITY_MSG_CONFIRM_REGISTRATION'] = (
         u'麻烦前往邮箱，点击确认链接完成注册，谢谢！', 'success')
 app.config['SECURITY_MSG_EMAIL_ALREADY_ASSOCIATED'] = (
-        '%(email)s 该邮箱已经注册。', 'error')
+        u'%(email)s 该邮箱已经注册。', 'error')
 app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
-        '请验证邮箱。', 'error')
+        u'请验证邮箱。', 'error')
 app.config['SECURITY_MSG_INVALID_EMAIL_ADDRESS'] = (
-        '邮箱无效。', 'error')
+        u'邮箱无效。', 'error')
 app.config['SECURITY_MSG_PASSWORD_INVALID_LENGTH'] = (
-        '密码请至少包含6个字符。', 'error')
+        u'密码请至少包含6个字符。', 'error')
 app.config['SECURITY_MSG_USER_DOES_NOT_EXIST'] = (
-        '用户不存在。', 'error')
+        u'用户不存在。', 'error')
 app.config['SECURITY_MSG_PASSWORDLESS_LOGIN_SUCCESSFUL'] = (
-        '登录成功！', 'success')
+        u'登录成功！', 'success')
 app.config['SECURITY_MSG_LOGIN']= (
-        '请登录。', 'info')
+        u'请登录。', 'info')
 
+app.config['SECURITY_MSG_PASSWORD_RESET_REQUEST'] = (
+        u'重置密码链接已经发往了 %(email)s。', 'info')
 db = SQLAlchemy(app)
 
 #login_manager = LoginManager()
