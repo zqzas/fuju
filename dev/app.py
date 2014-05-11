@@ -474,7 +474,12 @@ def index(group_id = None):
         else:
             #gender is not None and group_id is None (default)
             gender = 0 if gender == 'boys' else 1
-            groups = Group.query.filter_by(gender=gender).all()
+            groups = []
+            for group in Group.query.all():
+                if User.query.filter_by(id=group.user_id).first().gender == gender:
+                    groups.append(group)
+                
+            
 
     #if user_group:
     #    meetings = get_all_meetings(user_group.id)
