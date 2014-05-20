@@ -28,7 +28,7 @@ import os, datetime
 app = Flask(__name__)
 
 #DEBUG
-app.debug = True
+app.debug = False
 
 app.config['MY_DOMAIN'] = 'fdanke.com' #just to hold the place
 
@@ -504,7 +504,7 @@ def index(group_id = None):
         
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", debug=False)
+    app.run("0.0.0.0", debug=True)
 
 
 
