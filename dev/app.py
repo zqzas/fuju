@@ -28,7 +28,7 @@ import os, datetime
 app = Flask(__name__)
 
 #DEBUG
-app.debug = False
+app.debug = True
 
 app.config['MY_DOMAIN'] = 'fdanke.com' #just to hold the place
 
@@ -37,9 +37,10 @@ app.config['SECRET_KEY'] = 'FUD32'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////%s' % (os.path.join(app.config['CODE_PATH'], 'beta.db'))
 app.config['MAX_USER_LENGTH'] = 255
 app.config['IMAGE_PATH'] = 'static/image/'
+app.config['UPLOAD_PATH'] = app.config['CODE_PATH'] + '/static/image/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['SECURITY_TRACKABLE'] = True
-app.config['SECURITY_PASSWORD_HASH'] = 'bcrypt'
+app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 app.config['SECURITY_PASSWORD_SALT'] = '32'
 app.config['SECURITY_EMAIL_SENDER'] = 'danke_fd@163.com'
 app.config['SECURITY_CONFIRMABLE'] = True #Users are required to confirm their email when registering
@@ -322,7 +323,8 @@ def add_or_update_group():
         if len(f.filename) and allowed_file(f.filename):
             filename = secure_filename(f.filename) #filename is secured here
             #it should be an image now
-            f.save(os.path.join(app.config['IMAGE_PATH'], filename))
+	    #empty
+            f.save(os.path.join(app.config['UPLOAD_PATH'], filename))
             filenames.append(filename)
             counter += 1
         else:

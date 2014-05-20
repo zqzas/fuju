@@ -4,7 +4,7 @@ sys.path.append(path)
 
 from app import app as application
 
-activate_this = '/srv/www/fudanke.com/public_html/fuju/fuju/vir/bin/activate_this.py'
-execfile(activate_this, dict(__file__=activate_this))
+#activate_this = '/srv/www/fudanke.com/public_html/fuju/virtualenv_fuju/bin/activate_this.py'
+#execfile(activate_this, dict(__file__=activate_this))
 
 
