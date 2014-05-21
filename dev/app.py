@@ -28,7 +28,7 @@ import os, datetime
 app = Flask(__name__)
 
 #DEBUG
-app.debug = True
+app.debug = False
 
 app.config['MY_DOMAIN'] = 'fdanke.com' #just to hold the place
 
