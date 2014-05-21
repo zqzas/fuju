@@ -52,7 +52,7 @@
 		<script type="text/javascript" src="static/js/modernizr.min.js"></script>
   
     </head>
-    <body data-spy="scroll" data-target="#main-nav" data-offset="400" style="padding-top:150px;background-color: #eafbf9;">
+    <body data-spy="scroll" data-target="#main-nav" data-offset="400" style="padding-top:150px">
 	
         <div class="container text-center" id="lead_content" >
 			<!-- 
@@ -66,30 +66,30 @@
             </h1>
 			
             <h1 class="" style="">
-                从线上到线下， 让她们和他们相遇。
+                让爱情破壳而出。
             </h1>
 
             <div id="waitlist_wrapper">
                 
-                {% from "security/_macros.html" import render_field_with_errors, render_field, render_field_with_errors_with_customlabel %}
-                {% include "security/_messages.html" %}
-                
-                <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form" class="form-inline">
-                  {{ login_user_form.hidden_tag() }}
-                  
-                  {{ render_field_with_errors_with_customlabel(login_user_form.email, "", placeholder="邮箱", class_="form-control input-lg", size="40") }}
-                  {{ render_field_with_errors_with_customlabel(login_user_form.password, "", placeholder="密码", class_="form-control input-lg", size="40") }}
-                  
-                  {{ render_field(login_user_form.next) }}
-                  {{ render_field(login_user_form.submit, class_="btn btn-lg btn-qubico", value="登录") }}
-				  
-                  <a class="btn btn-lg btn-qubico " href="{{url_for_security('forgot_password')}}" style="">
-                      忘记密码
-                  </a>
+                <form action="/signin" class="form-inline"  method="post" role="form" novalidate="">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="7EUI5JVE3xDiebSS4C8dMikoBCAuyHwg" data-parsley-id="8191"><ul class="parsley-errors-list" id="parsley-id-8191"></ul>
+                    <div class="form-group" id="waitlist_email_group">
+                        <label class="sr-only" for="join_waitlist_email">Email address</label>
+                        <input class="form-control input-lg waitlist-email"  id="join_waitlist_email" name="email" placeholder="输入学校邮箱" size="40" type="email">
+                    </div>
+                    <div class="form-group" id="waitlist_email_group">
+                        <label class="sr-only" for="join_waitlist_email">Email address</label>
+                        <input class="form-control input-lg waitlist-email" id="join_waitlist_email" name="password" type="password" placeholder="输入密码" size="40">
+                    </div>
+					
+				   
+                    <div class="form-group">
+                        <button class="btn btn-lg btn-qubico" id="home_waitlist_button" type="submit" style="width:150px">
+                            登录
+                        </button>
+                    </div>
+					
                 </form>
-                
-                
-				
                 <button class="btn btn-qubico" data-toggle="modal" data-target=".bs-register-modal-lg" style="width:100px">注册</button>
             </div>
 			
