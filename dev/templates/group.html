@@ -60,12 +60,15 @@
 										
 												{% else %}
 													{% if group.user.id != user.id %}
-                                                    
-														<a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', target='/requestmeeting/%d' % group.id )}}" data-target="#myModal">发出邀请</a>
+                                                        {% if user.groups.count() > 0 %}
+														    <a class="btn btn-qubico white scrollto" data-toggle="modal" href="{{ url_for('get_modal', target='/requestmeeting/%d' % group.id )}}" data-target="#myModal">发出邀请</a>
+                                                        {% else %}
+                                                            <a class="btn btn-qubico white " disabled="disabled">请先添加小伙伴吧</a>
+                                                        {% endif%}
 													
 													{% else %}
 
-														<a class="btn btn-qubico white scrollto" disabled="disabled">自己</a>
+														<a class="btn btn-qubico white " disabled="disabled">自己</a>
 													{% endif %}
 										
 
