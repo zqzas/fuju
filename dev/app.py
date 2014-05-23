@@ -480,12 +480,12 @@ def index(group_id = None):
         #no group_id
         gender = request.args.get('gender')
         if gender is None:
-            groups = Group.query.filter_by(status == 0)
+            groups = Group.query.filter_by(status = 0)
         else:
             #gender is not None and group_id is None (default)
             gender = 0 if gender == 'boys' else 1
             groups = []
-            for group in Group.query.filter_by(status == 0):
+            for group in Group.query.filter_by(status = 0):
                 if User.query.filter_by(id=group.user_id).first().gender == gender:
                     groups.append(group)
                 
