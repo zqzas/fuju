@@ -343,6 +343,7 @@ def add_or_update_group():
         group = user.groups.first() #consider only first one
         (group.pic1, group.pic2, group.pic3) = tuple(filenames) # filenames should have no more than 3 elements
         (group.des1, group.des2, group.des3) = tuple(dess) # dess should have no more than 3 elements
+        group.status = 0
         db.session.add(group)
         db.session.commit()
 
@@ -479,12 +480,12 @@ def index(group_id = None):
         #no group_id
         gender = request.args.get('gender')
         if gender is None:
-            groups = Group.query.all()
+            groups = Group.query.filter_by(status == 0)
         else:
             #gender is not None and group_id is None (default)
             gender = 0 if gender == 'boys' else 1
             groups = []
-            for group in Group.query.all():
+            for group in Group.query.filter_by(status == 0):
                 if User.query.filter_by(id=group.user_id).first().gender == gender:
                     groups.append(group)
                 
